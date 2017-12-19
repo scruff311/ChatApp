@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const express = require('express');  
+const express = require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -31,13 +31,26 @@ io.on('connection', socket => {
   console.log('a user connected');
 
   // when the client emits the 'subscribeToTimer' event
-//   socket.on('subscribeToTimer', interval => {
-//     console.log('client is subscribing to timer with interval ', interval);
-//     setInterval(() => {
-//       // emit the 'timer' event every time it fires
-//       socket.emit('timer', new Date());
-//     }, interval);
-//   });
+  //   socket.on('subscribeToTimer', interval => {
+  //     console.log('client is subscribing to timer with interval ', interval);
+  //     setInterval(() => {
+  //       // emit the 'timer' event every time it fires
+  //       socket.emit('timer', new Date());
+  //     }, interval);
+  //   });
+
+  socket.on('base64 file', msg => {
+    // console.log('received base64 file from' + msg.username);
+    // socket.username = msg.username;
+    // socket.broadcast.emit('base64 image', //exclude sender
+    // io.sockets.emit('base64 file',  //include sender
+    socket.emit('new base64 file', {
+      //   username: socket.username,
+      file: msg.file,
+      fileName: msg.fileName,
+      previewURL: msg.previewURL
+    });
+  });
 
   socket.on('chat message', msg => {
     console.log('message: ' + msg.message);

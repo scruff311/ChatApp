@@ -43,12 +43,11 @@ class ChatContainer extends Component {
   }
 
   _handleFileUpload() {
-    socket.on('file_upload_success', data => {
-      console.log('file upload action was emitted', data.file);
-      this.props.createMessage({
-        room: this.props.room,
-        newMessage: { user: data.user, image: data.file },
-      });
+    socket.on('new base64 file', msg => {
+        console.log(`new image: ${msg.fileName}, url: ${msg.previewURL}`);
+        const messages = this.state.messages;
+        messages.push(msg.previewURL);
+        this.setState({ messages: messages });
     });
   }
 
@@ -65,8 +64,18 @@ class ChatContainer extends Component {
   }
 
   handleOnImageChange(ev) {
-    console.log('selected file:', ev.target.files[0]);
-    this.setState({ file: ev.target.files[0] });
+    const file = ev.target.files[0];
+    console.log('selected file: ', file);
+    let reader = new FileReader();
+    reader.onloadend = () => {
+        const msg = {
+            file: file,
+            fileName: file.name,
+            previewURL: reader.result
+        };
+        socket.emit('base64 file', msg);
+    }
+    reader.readAsDataURL(file);
   }
 
   render() {
