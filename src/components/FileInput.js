@@ -6,13 +6,13 @@ import ImageIcon from 'react-icons/lib/md/image';
 
 class FileInput extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       value: '',
       styles: {
         parent: {
-          position: 'relative'
+          position: 'relative',
         },
         file: {
           position: 'absolute',
@@ -20,24 +20,24 @@ class FileInput extends Component {
           left: 0,
           opacity: 0,
           width: '100%',
-          zIndex: 1
+          zIndex: 1,
         },
         text: {
           position: 'relative',
-          zIndex: -1
-        }
-      }
-    }
+          zIndex: -1,
+        },
+      },
+    };
 
-      this.handleChange = this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
     this.setState({
-      value: e.target.value.split(/(\\|\/)/g).pop()
-    })
+      value: e.target.value.split(/(\\|\/)/g).pop(),
+    });
 
-    if (this.props.onChange) this.props.onChange(e)
+    if (this.props.onChange) this.props.onChange(e);
   }
 
   render() {
@@ -50,10 +50,11 @@ class FileInput extends Component {
           onChange={this.handleChange}
           disabled={this.props.disabled}
           accept={this.props.accept}
-          style={this.state.styles.file} />
+          style={this.state.styles.file}
+        />
 
-          <ImageIcon />
-          {/* <input
+        <ImageIcon />
+        {/* <input
           type="text"
           tabIndex="-1"
           name={"this.props.name + '_filename'"}
@@ -64,7 +65,7 @@ class FileInput extends Component {
           disabled={this.props.disabled}
           style={this.state.styles.text} /> */}
       </div>
-    )
+    );
   }
 }
 
