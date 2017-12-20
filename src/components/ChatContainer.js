@@ -37,17 +37,25 @@ class ChatContainer extends Component {
     socket.on('new message', inboundMessage => {
       console.log('new message: ' + inboundMessage.message);
       const messages = this.state.messages;
-      messages.push(inboundMessage.message);
+      const msg = {
+        type: 'text',
+        message: inboundMessage.message,
+      };
+      messages.push(msg);
       this.setState({ messages: messages });
     });
   }
 
   _handleFileUpload() {
-    socket.on('new base64 file', msg => {
-        console.log(`new image: ${msg.fileName}, url: ${msg.previewURL}`);
-        const messages = this.state.messages;
-        messages.push(msg.previewURL);
-        this.setState({ messages: messages });
+    socket.on('new base64 file', inboundMessage => {
+      console.log(`new image: ${inboundMessage.fileName}`);
+      const messages = this.state.messages;
+      const msg = {
+        type: 'image',
+        message: inboundMessage.previewURL,
+      };
+      messages.push(msg);
+      this.setState({ messages: messages });
     });
   }
 
@@ -68,13 +76,13 @@ class ChatContainer extends Component {
     console.log('selected file: ', file);
     let reader = new FileReader();
     reader.onloadend = () => {
-        const msg = {
-            file: file,
-            fileName: file.name,
-            previewURL: reader.result
-        };
-        socket.emit('base64 file', msg);
-    }
+      const msg = {
+        file: file,
+        fileName: file.name,
+        previewURL: reader.result,
+      };
+      socket.emit('base64 file', msg);
+    };
     reader.readAsDataURL(file);
   }
 

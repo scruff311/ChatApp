@@ -27,14 +27,14 @@ class MessageContainer extends Component {
     const messages = this.props.messages;
     // console.log('messages: ' + messages);
     const listItems = messages.map((item, index) => {
-      if (item.length < 500) {
+      if (item.type === 'text') {
         console.log('the message is text');
-        return <li key={index}>{item}</li>;
+        return <li key={index}>{item.message}</li>;
       } else {
         console.log('the message is an image');
         return (
           <li key={index}>
-            <img src={item} />
+            <img src={item.message} />
           </li>
         );
       }
